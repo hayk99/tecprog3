@@ -1,38 +1,34 @@
 #pragma once
 
 #include <memory>
+#include <string>
+#include <iostream>
+#include <list>
+
+using namespace std;
 
 class Elemento {
+protected:
 	string nombre;
 
 public:
 	Elemento();
 	~Elemento();
-	int obtenerTamanyo(int i = 0);
+	virtual int obtenerTamanyo(int i = 0) = 0;
 	string devolverNombre();
 	void renombrar(const string& nombre);
 };
 
+
 class Archivo:Elemento {
-	int tamanto;
+	int tamanyo;
 public:
 	Archivo();
 	Archivo(const string& nombre);
 	Archivo(const string& nombre, const int tam);
 	~Archivo();
-	int obtenerTamanyo(int i = 0);
-	void cambiarTamaño(const int tam);
-};
-
-class Directorio:Elemento {
-	std::List<Elemento> elementos;
-	int numElementos;
-public:
-	Directorio();
-	~Directorio();
-	int obtenerTamanyo(int i = 0);
-	void añadir(const Elemento& fichero);
-	bool borrar(const string& fichero);
+	int obtenerTamanyo(int i = 0) override;
+	void cambiarTamanyo(const int tam);
 };
 
 class Enlace:Elemento {
@@ -40,5 +36,20 @@ class Enlace:Elemento {
 public:
 	Enlace(const string& nombre, const Elemento& fichero);
 	~Enlace();
-	int obtenerTamanyo(int i = 0);
+	int obtenerTamanyo(int i = 0) override;
 };
+
+class Directorio:Elemento {
+	std::list<Elemento> elementos;
+	int numElementos;
+public:
+	Directorio();
+	Directorio(const string& nombreDir);
+	~Directorio();
+	int obtenerTamanyo(int i = 0)  override;
+	void anyadir(const Elemento& fichero);
+	// bool existe
+	bool borrar(const string& fichero);
+	// void mostrarElementos
+};
+
