@@ -2,7 +2,7 @@
 
 class Ruta {
 	string ruta;
-	list<Directorio*> rutaActual;
+	std::list<std::shared_ptr<Directorio>> rutaActual;
 	std::shared_ptr <Directorio> dirActual;
 
 public:
@@ -29,13 +29,37 @@ void Ruta::ls() {
 }
 
 void cd(string path) {
-	dir=strtok(path, "/");
-	cout << "  " <<dir;
-	while( ( (dir=strtok(NULL, "/")) != NULL) && existe) {
-		cout << "  " << dir;
-		bool existe = existe(dir);
+	rutaActual<Directorio>::iterator iter;
+	iter = rutaActual.begin();
+	//find 
+	// if . no hago na
+	// else substr and erase
+	if (path!=".") {
+		if (path="/") {
+			//destruir
+			rutaActual.erase(next(begin(rutaActual)), end(rutaActual));
+		}
+		else if (path=".."){
+			//quito un elemento
+			rutaActual.pop_back();
+		}
+		else {
+			int pos = path.find("/",0);
+			if (pos == -1) {
+				string dir = path.substr(0);
+				shared_ptr<Directorio> ptr;
+				bool existe = *dirActual.existe(dir, ptr);
+				shared_ptr<Directorio> meDevuelve = dynamic_cast<Directorio>(ptr)
+				if ( ptr != null && existe )
+					rutaActual.push_back(meDevuelve);
+			}
+			else if (pos == 0) {
+				string newPath = path.erase(0);
+				cd (newPath);
+			}
+		}
 	}
-	if (!existe) cout << path << "No such file or directory \n";
+
 }
 
 void stat(string element) {

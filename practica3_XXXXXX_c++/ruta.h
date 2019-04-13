@@ -10,7 +10,6 @@ using namespace std;
 class Elemento {
 protected:
 	string nombre;
-
 public:
 	Elemento();
 	~Elemento();
@@ -40,16 +39,16 @@ public:
 };
 
 class Directorio:Elemento {
-	std::list<Elemento> elementos;
+	list<shared_ptr<Elemento>> elementos;
 	int numElementos;
 public:
 	Directorio();
 	Directorio(const string& nombreDir);
 	~Directorio();
 	int obtenerTamanyo(int i = 0)  override;
-	void anyadir(const Elemento& fichero);
-	// bool existe
+	void anyadir(const shared_ptr<Elemento>& elemento);
 	bool borrar(const string& fichero);
-	// void mostrarElementos
+	void mostrarElementos(string& salida);
+	bool devolverElemento(const string& fichero, shared_ptr<Elemento>& elemento);
 };
 
