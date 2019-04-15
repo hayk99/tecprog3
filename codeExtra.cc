@@ -1,33 +1,3 @@
-//Esto al .h
-
-class Ruta {
-	string ruta;
-	std::list<std::shared_ptr<Directorio>> rutaActual;
-	std::shared_ptr <Directorio> dirActual;
-
-public:
-	Ruta();
-	~Ruta();
-	string pwd();
-	void ls();
-	void cd(string path);
-	void stat(string element);
-};
-
-//Esto al cc
-
-Ruta::Ruta(const Directorio& root_)rutaActual("/"), dirActual(dirActual) {};
-
-Ruta::~Ruta() {};
-
-string Ruta::pwd() { 
-	return rutaActual;
-}
-
-void Ruta::ls() {
-	Directorio::mostrarELementos(p);
-}
-
 void cd(string path) {
 	rutaActual<Directorio>::iterator iter;
 	iter = rutaActual.begin();
@@ -64,7 +34,7 @@ void cd(string path) {
 
 void stat(string element) {
 	string elemento;
-	if ( elemtn[0]='/') {
+	if ( element[0]='/') {
 		elemento=strtok(path, "/");
 		cout << "  " <<elemento;
 		while( ( (elemento=strtok(NULL, "/")) != NULL) && existe) {
@@ -74,5 +44,4 @@ void stat(string element) {
 	}
 	else elemento=element;
 	elemento.obtenerTamanyo()
-
 }

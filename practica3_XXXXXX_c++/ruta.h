@@ -52,3 +52,17 @@ public:
 	bool devolverElemento(const string& fichero, shared_ptr<Elemento>& elemento);
 };
 
+class Ruta {
+	string ruta; // Para sacar por pantalla la ruta
+	std::list<std::shared_ptr<Directorio>> rutaActual;  // Lista de punteros a los directorios por los que se ha bajado
+	std::shared_ptr <Directorio> dirActual; // Puntero al directorio actual
+
+public:
+	Ruta(Directorio& root_);
+	~Ruta();
+	string pwd();
+	void ls();
+	//void cd(string path);
+	//void stat(string element);
+};
+

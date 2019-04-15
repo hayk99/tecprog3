@@ -98,15 +98,32 @@ int Directorio::obtenerTamanyo(int i){
 	return total;
 }
 
-bool devolverElemento(const string& fichero, shared_ptr<Elemento>& elemento){
+bool Directorio::devolverElemento(const string& fichero, shared_ptr<Elemento>& elemento){
 	bool encontrado = false;
 	for(list<shared_ptr<Elemento>>::iterator i = elementos.begin(); !encontrado && i != elementos.end(); i++){
 		if((*(*i)).devolverNombre() == fichero){
 			encontrado = true;
-			elemento = (*(*i));
+			elemento = (*i);
 		}
 	}
 	return encontrado;
+}
+
+Ruta::Ruta(Directorio& root_): ruta("/"), dirActual(dirActual) {
+	shared_ptr<Directorio> ptr(&root_);
+	rutaActual.push_back(ptr);
+};
+
+Ruta::~Ruta() {};
+
+string Ruta::pwd() { 
+	return ruta;
+}
+
+void Ruta::ls() {
+	string e;
+	(*dirActual).mostrarElementos(e);
+	cout <<  e << endl;
 }
 
 
