@@ -1,6 +1,15 @@
 #pragma once
 
 #include "elemento.h"
+#include "directorio.h"
+#include "enlace.h"
+#include "archivo.h"
+#include <memory>
+#include <string>
+#include <iostream>
+#include <list>
+
+using namespace std;
 
 class Ruta {
 	string ruta; // Para sacar por pantalla la ruta

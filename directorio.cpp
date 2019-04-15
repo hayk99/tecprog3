@@ -14,7 +14,7 @@ void Directorio::anyadir(const shared_ptr<Elemento>& elemento){
 
 
 bool Directorio::borrar(const string& fichero){
-	bool encontrado = false; // Por que no se pueden declarar variables de distinto tipo en un for
+	bool encontrado = false;
 	for(list<shared_ptr<Elemento>>::iterator i = elementos.begin(); !encontrado && i != elementos.end(); i++){
 		if((*(*i)).devolverNombre() == fichero){
 			encontrado = true;
@@ -30,6 +30,7 @@ void Directorio::mostrarElementos(string& salida){
 		salida += (*e).devolverNombre();
 		salida += "\n";
 	}
+	salida.pop_back();
 }
 
 int Directorio::obtenerTamanyo(int i){
@@ -49,4 +50,9 @@ bool Directorio::devolverElemento(const string& fichero, shared_ptr<Elemento>& e
 		}
 	}
 	return encontrado;
+}
+
+bool Directorio::cambiarTamanyo(const int tam){
+	cout << "Operacion no permitida, " << nombre << " es un directorio" << endl;
+	return false;
 }
