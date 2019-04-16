@@ -26,4 +26,5 @@ public:
 	void mkdir(string dir);
 	void ln(string orig, string dest);
 	void rm(string e);
+	bool addList (string& path, shared_ptr<Elemento>& ptr, string& dir);
 };

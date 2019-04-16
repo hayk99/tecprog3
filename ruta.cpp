@@ -17,11 +17,23 @@ void Ruta::ls() {
 }
 
 
+bool Ruta::addList(string& path, shared_ptr<Elemento>& ptr, string& dir){
+	shared_ptr<Directorio> dado = dynamic_pointer_cast<Directorio>(ptr);
+	if (dado != nullptr){
+		rutaActual.push_back(dado);
+		dirActual = dado;
+		ruta += '/';
+		ruta += dir;
+		return true;
+	}
+	else return false;
+}
+
 void Ruta::cd(string path) {
 	if (path!=".") {
 		if (path=="/") {  //quiere ir a raiz
 			//destruir
-			*rutaActual.erase(next(rutaActual.begin()), rutaActual.end());
+			rutaActual.erase(next(rutaActual.begin()), rutaActual.end());
 			//actualizo string de ruta
 			ruta = "/";
 			//cojo ptr
@@ -40,9 +52,9 @@ void Ruta::cd(string path) {
 		}
 		else if (path=="~"){ //va a home del usuario
 			list<std::shared_ptr<Directorio>>::iterator iter;
-			for (iter = rutaActual.begin(); rutaActual.end(); iter++) {
+			for (iter = rutaActual.begin(); iter != rutaActual.end(); iter++) {
 				shared_ptr<Directorio> aux = *iter;
-				if ( (*iter).devolverNombre() = "home" )
+				if ( ((**iter).devolverNombre() == "home") )
 					rutaActual.push_back(aux);
 				else rutaActual.pop_back();
 				iter++;
@@ -50,29 +62,51 @@ void Ruta::cd(string path) {
 			}
 		}
 		else {
-			shared_ptr<Directorio> aux = nullptr;
+			shared_ptr<Elemento> aux = nullptr;
 			if (path[0] != '/') { //entonces hago cd a un nodo hijo
 				int pos = path.find('/'); //busco la barra
 				if (pos > 0){ //path contiene varios nodos
+					string dir = "";
 					while (pos > 0) { // o sea hay una '/' al menos
-						string dir = path.substr (0, pos); //cojo la primera parte
-						if (devolverElemento(dir, aux)) {
-							shared_ptr<Directorio> dado = dynamic_pointer_cast<Directorio>(aux);
+						dir = path.substr (0, pos); //cojo la primera parte
+						if ((*dirActual).devolverElemento(dir, aux) && addList(path,aux,dir)) {
+							//si existe ese directorio y el ptr dado por Directorio no es null, es decir es un tipo Directorio
+							//lo que he leido del path lo añado
+							/*shared_ptr<Directorio> dado = dynamic_pointer_cast<Directorio>(aux);
 							if (*dado != nullptr){
 								rutaActual.push_back(aux);
 								dirActual = dado;
-								ruta += path;
+								ruta += '/';
+								ruta += dir;
 								path.erase (0,pos+1) //borro ese parte del path
 								pos = path.find('/');
 							}
+							else pos = -1;*/
 						}
+						//sino termino bucle porque la ruta es incompleta
+						else pos = -1;
 					}
+					//hago esta iteracion por si el user introduce dir1/dir2 en vez de dir1/dir2/
+					dir = path.substr(0, path.length());
+					if ((*dirActual).devolverElemento(dir, aux)) {
+						bool kk = addList (path, aux, dir);
+						/*shared_ptr<Directorio> dado = dynamic_pointer_cast<Directorio>(aux);
+						if (*dado != nullptr){
+							rutaActual.push_back(aux);
+							dirActual = dado;
+							ruta += '/';
+							ruta += dir;
+						}*/
+					}
+
 				}
-				else if (devolverElemento(path, aux)) { //path esta compuesto solo por un hijo
+				//hace cd a un solo directorio
+				else if ((*dirActual).devolverElemento(path, aux)) { //path esta compuesto solo por un hijo
 					shared_ptr<Directorio> dado = dynamic_pointer_cast<Directorio>(aux);
-					if (*dado != nullptr) {
-						rutaActual.push_back(aux);
+					if (dado != nullptr) {
+						rutaActual.push_back(dado);
 						dirActual = dado;
+						ruta += '/';
 						ruta += path;
 					}
 				}
@@ -82,21 +116,31 @@ void Ruta::cd(string path) {
 				int pos = path.find('/');
 				string dir = path.substr(0,pos); //saco el primer directorio
 				if (dir == "home") {//esta bien introducida la ruta completa, puedo seguir
-					int pos = path.find('/'); //busco la barra
-					while (pos > 0) { // o sea hay una '/' al menos
-						dir = path.substr (0, pos); //cojo la primera parte
-						if (devolverElemento(dir, aux)) {
-							shared_ptr<Directorio> dado = dynamic_pointer_cast<Directorio>(aux);
-							if (*dado != nullptr){
-									rutaActual.push_back(aux);
-									dirActual = dado;
-									ruta += path;
-									path.erase (0,pos+1); //borro ese parte del path
-									pos = path.find('/');
+					list<std::shared_ptr<Directorio>>::iterator iter;
+					//busco en mi Lista de dirs dónde tengo el home
+					for (iter = rutaActual.begin(); iter != rutaActual.end(); iter++) {
+							if ( ((**iter).devolverNombre() != "home") ) {
+								iter++;
+								pos = -1;
 							}
-						}
+							else  {
+								//no es ruta completa válida
+								iter = rutaActual.end();
+							}
 					}
 				}
+				pos = path.find('/');
+				while (pos > 0 ){ 
+					path.erase(0,pos+1);
+					dir = path.substr(0,pos);
+					if ((**iter).devolverNombre() == dir) {
+						iter++;
+					}
+					else { //ahora tengo que añadir a mi path{
+
+					}
+					pos = path.find('/');
+				}// o sea hay una '/' al menos
 			}
 		}
 	}
