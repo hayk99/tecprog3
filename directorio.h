@@ -15,6 +15,6 @@ public:
 	bool cambiarTamanyo(const int tam) override;
 	void anyadir(const shared_ptr<Elemento>& elemento);
 	bool borrar(const string& fichero);
-	void mostrarElementos(string& salida);
+	string mostrarElementos();
 	bool devolverElemento(const string& fichero, shared_ptr<Elemento>& elemento);
 };

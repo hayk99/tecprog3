@@ -2,12 +2,12 @@
 
 Archivo::Archivo(){
 	nombre = "nuevo";
-	tamanyo = 0;
+	tamanyo = 1;
 }
 
 Archivo::Archivo(const string& nombre){
 	Archivo::nombre = nombre;
-	tamanyo = 0;
+	tamanyo = 1;
 }
 
 Archivo::Archivo(const string& nombre, const int tam){

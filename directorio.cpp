@@ -24,13 +24,14 @@ bool Directorio::borrar(const string& fichero){
 	return encontrado;
 }
 
-void Directorio::mostrarElementos(string& salida){
-	salida = "";
+string Directorio::mostrarElementos(){
+	string salida;
 	for(auto& e:elementos){
 		salida += (*e).devolverNombre();
 		salida += "\n";
 	}
 	salida.pop_back();
+	return salida;
 }
 
 int Directorio::obtenerTamanyo(int i){
