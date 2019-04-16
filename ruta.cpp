@@ -128,7 +128,7 @@ void Ruta::cd(string path) {
 								iter = rutaActual.end();
 							}
 					}
-				}
+				}/*
 				pos = path.find('/');
 				while (pos > 0 ){ 
 					path.erase(0,pos+1);
@@ -141,6 +141,7 @@ void Ruta::cd(string path) {
 					}
 					pos = path.find('/');
 				}// o sea hay una '/' al menos
+				*/
 			}
 		}
 	}
@@ -263,11 +264,48 @@ void Ruta::mkdir (string dir) {
 	ruta+= dir;
 }
 
-void Ruta::ln(string orig, string dest) {
 
-	if (orig[0]!='/'); // es un enlace inter
+void Ruta::ln (string orig, string dest) {
+	shared_ptr<Directorio> ptrDir = nullptr;
+	bool completo = false,  nodoHijo = false, terminado = false;
+	shared_ptr<Elemento> nuevo = nullptr;
+	int pos = 0;
+	string dir = "";
+	if (orig[0]=='/') { //path completo
+		ptrDir = make_shared<Directorio>("/");
+		dest.erase (0); //elimino la primera / de la ruta completa
+		completo = true;
+
+	}
+	else {	//nodos hijos
+		ptrDir = dirActual;
+		nodoHijo = true;
+	}
+	if ( (dest.find('/') < 0 ) && (completo || nodoHijo)  ){
+		dir = dest.substr(0, dest.length());
+		if ((*ptrDir).devolverElemento(dir, nuevo ))
+			shared_ptr<Enlace> ptrLn = make_shared<Enlace>(orig, nuevo);
+		terminado  = true;
+	}
+	if (!terminado) {
+		pos = dest.find('/');
+		dir = dest.substr(0,pos);
+		if ( pos > 0 ) {
+			while ( pos > 0) {
+				if ((*ptrDir).devolverElemento(dir, nuevo)) {
+					dest.erase (0,pos+1);
+					pos = dest.find ('/');
+					if (pos > 0) dir = dest.substr (0,pos);				}
+			}
+			if (dest.length() > 0) dir = dest.substr (0, dest.length());
+			if ((*ptrDir).devolverElemento(dir, nuevo))
+					shared_ptr<Enlace> ptrLn = make_shared<Enlace>(orig, nuevo);
+		}
+	}
 }
 
 void Ruta::rm (string e) {
+	if ( e[0] != '/' ) { //elimina algo del nodo actual
 
+	}
 }
