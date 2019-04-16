@@ -22,7 +22,7 @@ public:
 	void ls();
 	void cd(string path);
 	void stat(string elemento);
-	void vim(string vim);
+	void vim(string vim,const int size);
 	void mkdir(string dir);
 	void ln(string orig, string dest);
 	void rm(string e);

@@ -12,10 +12,10 @@ string Ruta::pwd() {
 }
 
 void Ruta::ls() {
-	string e;
-	(*dirActual).mostrarElementos(e);
+	string e = (*dirActual).mostrarElementos();
 	cout <<  e << endl;
 }
+
 
 void Ruta::cd(string path) {
 	if (path!=".") {
@@ -42,11 +42,11 @@ void Ruta::cd(string path) {
 			list<std::shared_ptr<Directorio>>::iterator iter;
 			for (iter = rutaActual.begin(); rutaActual.end(); iter++) {
 				shared_ptr<Directorio> aux = *iter;
-				if ( *iter.devolverNombre() = "home" )
+				if ( (*iter).devolverNombre() = "home" )
 					rutaActual.push_back(aux);
 				else rutaActual.pop_back();
 				iter++;
-				aux=iter;
+				aux=(*iter);
 			}
 		}
 		else {
@@ -102,20 +102,65 @@ void Ruta::cd(string path) {
 	}
 
 }
-
-void Ruta::stat(string path) {
-
-}
 /*
-void Ruta::vim (string file, int size) {
-	if (/*es un nodo hijo del padre) {
-		archivo.cambiarTamanyo(size);
+void Ruta::stat(string path) {
+	shared_ptr<Elemento> item = nullptr;
+	if (path[0]!='/') { //no es un path completo
+		dirActual.devolverElemento(path, item);
+		int peso = *item.obtenerTamanyo(0);
+		cout << path << " tiene un peso de: "<<peso <<endl;
 	}
-	else {
-		archivo(file, size);
+	else { //es una ruta completa
+		/*path.erase (0);
+		int pos = path.find('/');
+		if (pos > 0) {	// es una ruta con varios '/', tipo : /dir1/dir2/file
+			while (pos > 0) {
+				dir = path.substr (0, pos); //cojo la primera parte
+				if (devolverElemento(dir, item)) {
+					shared_ptr<Directorio> dado = dynamic_pointer_cast<Directorio>(item);
+					if (*dado != nullptr){
+							rutaActual.push_back(item);
+							dirActual = dado;
+							ruta += path;
+							path.erase (0,pos+1); //borro ese parte del path
+							pos = path.find('/');
+					}
+				}
+			}
+		}
+		else { // path de tipo: /dir/file
+			list<std::shared_ptr<Directorio>>::iterator iter;
+			iter = rutaActual.begin();
+			string dir = path.substr(0,pos);
+			int peso = 0;
+			while ( iter != rutaActual.end() ){
+				if ( *iter.devolverNombre==dir ) {
+					path.erase(0); //elimino ultima barra
+					dir = path.substr(0,ruta.length()); //extraigo nombre
+					*iter.devolverElemento(path, item);
+					peso = *item.obtenerTamanyo(0);
+					cout << path << " tiene un peso de: "<<peso <<endl;
+					iter = rutaActual.end();
+				}
+				else iter++;
+			}
+		}	
 	}
 }
 */
+
+void Ruta::vim (string file, int size) {
+	shared_ptr<Elemento> ptr = nullptr;
+	if ((*dirActual).devolverElemento(file, ptr)) {
+		(*ptr).cambiarTamanyo(size);
+	}
+	else {//no existe
+		ptr = make_shared<Archivo>(file);
+		(*dirActual).anyadir(ptr);
+	}
+	(*ptr).cambiarTamanyo(size);
+}
+
 
 void Ruta::mkdir (string dir) {
 	Directorio nuevo (dir);
@@ -129,6 +174,7 @@ void Ruta::mkdir (string dir) {
 
 void Ruta::ln(string orig, string dest) {
 
+	if (orig[0]!='/'); // es un enlace inter
 }
 
 void Ruta::rm (string e) {
