@@ -8,6 +8,7 @@
 #include <string>
 #include <iostream>
 #include <list>
+#include <sstream>
 
 using namespace std;
 
@@ -21,7 +22,7 @@ public:
 	string pwd();
 	void ls();
 	void cd(string path);
-	void stat(string elemento);
+	void stat(const string& path);
 	void vim(string vim,const int size);
 	void mkdir(string dir);
 	void ln(string orig, string dest);
