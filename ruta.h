@@ -20,6 +20,10 @@ public:
 	~Ruta();
 	string pwd();
 	void ls();
-	//void cd(string path);
-	//void stat(string element);
+	void cd(string path);
+	void stat(string elemento);
+	void vim(string vim);
+	void mkdir(string dir);
+	void ln(string orig, string dest);
+	void rm(string e);
 };
