@@ -305,7 +305,39 @@ void Ruta::ln (string orig, string dest) {
 }
 
 void Ruta::rm (string e) {
-	if ( e[0] != '/' ) { //elimina algo del nodo actual
-
+	shared_ptr<Elemento> ptrDir = nullptr;
+	bool completo = false,  nodoHijo = false, terminado = false;
+	shared_ptr<Elemento> nuevo = nullptr;
+	int pos = 0;
+	string dir = "";
+	if (orig[0]=='/') { //path completo
+		ptrDir = make_shared<Directorio>("/");
+		dest.erase (0); //elimino la primera / de la ruta completa
+		completo = true;
+	}
+	else {	//nodos hijos
+		ptrDir = dirActual;
+		nodoHijo = true;
+	}
+	if ( (dest.find('/') < 0 ) && (completo || nodoHijo)  ){ //ruta tipo "/home" o "dir1"
+		dir = dest.substr(0, dest.length());
+		if ((*ptrDir).devolverElemento(dir, nuevo ))
+			nuevo.borrar(dir);
+		terminado  = true;
+	}
+	if (!terminado) { //ruta con mas de un elemento, tipo -> dir1/dir2/dir3
+		pos = dest.find('/');
+		dir = dest.substr(0,pos);
+		if ( pos > 0 ) {
+			while ( pos > 0) {
+				if ((*ptrDir).devolverElemento(dir, nuevo)) {
+					dest.erase (0,pos+1);
+					pos = dest.find ('/');
+					if (pos > 0) dir = dest.substr (0,pos);				}
+			}
+			if (dest.length() > 0) dir = dest.substr (0, dest.length());
+			if ((*ptrDir).devolverElemento(dir, nuevo))
+					nuevo.borrar(dir);
+		}
 	}
 }
