@@ -4,7 +4,6 @@
 #include <sstream>
 
 #include "ruta.h"
-#include "ruta.cpp"
 
 using namespace std;
 

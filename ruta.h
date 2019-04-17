@@ -21,7 +21,7 @@ public:
 	~Ruta();
 	string pwd();
 	void ls();
-	void cd(string path);
+	void cd(const string& path);
 	void stat(const string& path);
 	void ln(const string& orig, const string& dest);
 	void rm(const string& path);

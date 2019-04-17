@@ -31,7 +31,9 @@ bool Ruta::addList(string& path, shared_ptr<Elemento>& ptr, string& dir){
 	else return false;
 }
 
-void Ruta::cd(string path) {
+void Ruta::cd(const string& path) {
+	string copia = path, elem;
+	shared_ptr<Directorio> dir = dirActual;
 	if (path!=".") {
 		if (path=="/") {  //quiere ir a raiz
 			//destruir
@@ -47,107 +49,73 @@ void Ruta::cd(string path) {
 			//cambio ptr a dir actual
 			dirActual = rutaActual.back();
 			//modifico string del nombre de la ruta actual 
-			int lastSlash = ruta.rfind('/');
-			int lastElement = ruta.length();
-			ruta.erase(lastSlash, lastElement);
-
-		}
-		else if (path=="~"){ //va a home del usuario
-			list<std::shared_ptr<Directorio>>::iterator iter;
-			for (iter = rutaActual.begin(); iter != rutaActual.end(); iter++) {
-				shared_ptr<Directorio> aux = *iter;
-				if ( ((**iter).devolverNombre() == "home") )
-					rutaActual.push_back(aux);
-				else rutaActual.pop_back();
-				iter++;
-				aux=(*iter);
-			}
+			ruta.erase(ruta.length()-1);
+			ruta.erase(ruta.rfind('/')+1, ruta.length());
 		}
 		else {
-			shared_ptr<Elemento> aux = nullptr;
-			if (path[0] != '/') { //entonces hago cd a un nodo hijo
-				int pos = path.find('/'); //busco la barra
-				if (pos > 0){ //path contiene varios nodos
-					string dir = "";
-					while (pos > 0) { // o sea hay una '/' al menos
-						dir = path.substr (0, pos); //cojo la primera parte
-						if ((*dirActual).devolverElemento(dir, aux) && addList(path,aux,dir)) {
-							//si existe ese directorio y el ptr dado por Directorio no es null, es decir es un tipo Directorio
-							//lo que he leido del path lo añado
-							/*shared_ptr<Directorio> dado = dynamic_pointer_cast<Directorio>(aux);
-							if (*dado != nullptr){
-								rutaActual.push_back(aux);
-								dirActual = dado;
-								ruta += '/';
-								ruta += dir;
-								path.erase (0,pos+1) //borro ese parte del path
-								pos = path.find('/');
-							}
-							else pos = -1;*/
+			//creo una copia de la lista actual
+			std::list<std::shared_ptr<Directorio>> rutaNueva;
+			rutaNueva = rutaActual;
+			std::shared_ptr<Directorio> salvado = dirActual;	
+			string salvar = ruta;	
+			if (path[0] == '/') {
+				copia.erase(0,1);
+				ruta = '/';
+				dir = rutaActual.front();
+				//borro lista de dirs y añado solo a raiz
+				rutaNueva.erase(rutaNueva.begin(), rutaNueva.end());
+				rutaNueva.push_back(dir);
+			}
+			shared_ptr<Elemento> aux;   // Puntero al elemento a buscar
+			int pos = copia.find('/');
+			elem = copia.substr(0,pos);
+			bool seguir = true, pathCorrecto = true;
+			if ( pos > 0 ) {
+				while ( pos > 0 && seguir) {
+					if ((*dir).devolverElemento(elem, aux)) {
+						dir = dynamic_pointer_cast<Directorio>(aux);
+						if (dir != nullptr) {
+							rutaNueva.push_back(dir);
+							ruta+= elem;
+							ruta+= '/';
+							copia.erase (0,pos+1);
+							pos = copia.find ('/');
+							if (pos > 0) elem = copia.substr (0,pos);		
+						} 	
+						else {
+							seguir = false;
+							pathCorrecto = false;
 						}
-						//sino termino bucle porque la ruta es incompleta
-						else pos = -1;
 					}
-					//hago esta iteracion por si el user introduce dir1/dir2 en vez de dir1/dir2/
-					dir = path.substr(0, path.length());
-					if ((*dirActual).devolverElemento(dir, aux)) {
-						bool kk = addList (path, aux, dir);
-						/*shared_ptr<Directorio> dado = dynamic_pointer_cast<Directorio>(aux);
-						if (*dado != nullptr){
-							rutaActual.push_back(aux);
-							dirActual = dado;
-							ruta += '/';
-							ruta += dir;
-						}*/
-					}
-
-				}
-				//hace cd a un solo directorio
-				else if ((*dirActual).devolverElemento(path, aux)) { //path esta compuesto solo por un hijo
-					shared_ptr<Directorio> dado = dynamic_pointer_cast<Directorio>(aux);
-					if (dado != nullptr) {
-						rutaActual.push_back(dado);
-						dirActual = dado;
-						ruta += '/';
-						ruta += path;
+					else  {
+						seguir = false;
+						pathCorrecto = false;
 					}
 				}
 			}
-			else if (path[0] == '/') {//es una ruta completa desde raiz
-				path.erase(0,1);//borro la barra
-				int pos = path.find('/');
-				string dir = path.substr(0,pos); //saco el primer directorio
-				if (dir == "home") {//esta bien introducida la ruta completa, puedo seguir
-					list<std::shared_ptr<Directorio>>::iterator iter;
-					//busco en mi Lista de dirs dónde tengo el home
-					for (iter = rutaActual.begin(); iter != rutaActual.end(); iter++) {
-							if ( ((**iter).devolverNombre() != "home") ) {
-								iter++;
-								pos = -1;
-							}
-							else  {
-								//no es ruta completa válida
-								iter = rutaActual.end();
-							}
-					}
-				}/*
-				pos = path.find('/');
-				while (pos > 0 ){ 
-					path.erase(0,pos+1);
-					dir = path.substr(0,pos);
-					if ((**iter).devolverNombre() == dir) {
-						iter++;
-					}
-					else { //ahora tengo que añadir a mi path{
-
-					}
-					pos = path.find('/');
-				}// o sea hay una '/' al menos
-				*/
+			if (copia.length() > 0) elem = copia.substr (0, copia.length());
+			if ((*dir).devolverElemento(elem, aux)){
+				dir = dynamic_pointer_cast<Directorio>(aux);
+				if (dir != nullptr) {			
+					rutaNueva.push_back(dir);
+					ruta+= elem;
+					ruta+= '/';
+				}
+			}
+			if (!pathCorrecto) { 
+				cout << "Directorio \""<< path << "\" no existe\n";
+				dirActual = salvado;
+				ruta = salvar;
+			}
+			else {
+				rutaActual = rutaNueva;
+				dirActual = rutaActual.back();
 			}
 		}
 	}
 }
+
+
 
 void Ruta::stat(const string& path) {
 	string copia = path, elemento_a_busc;
@@ -182,7 +150,7 @@ void Ruta::stat(const string& path) {
 		}
 	} while(!salir);
 	if(esta && f.eof()){
-		cout << (*aux).obtenerTamanyo() << endl;
+		cout << "Tamaño es: " << (*aux).obtenerTamanyo() << endl;
 	}
 }
 
@@ -199,10 +167,8 @@ void Ruta::vim (string file, int size) {
 
 void Ruta::mkdir (string dir) {
 	Directorio nuevo (dir);
-	cout << "dir actual es: "<< (*dirActual).devolverNombre()<<endl;
 	shared_ptr<Directorio> ptrNew = make_shared<Directorio>(dir);
 	(*dirActual).anyadir (ptrNew);
-	cout << "creado dir con nombre: "<< dir << endl;
 }
 
 
