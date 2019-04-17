@@ -3,6 +3,7 @@
 Enlace::Enlace(const string& nombre, const shared_ptr<Elemento>& e): ptr(e){
 	Enlace::nombre = nombre;
 }
+Enlace::~Enlace(){}
 
 int Enlace::obtenerTamanyo(int i){
 	if (i > 1024){

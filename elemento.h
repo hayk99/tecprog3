@@ -12,7 +12,7 @@ protected:
 	string nombre;
 public:
 	Elemento();
-	
+	~Elemento();
 	string devolverNombre();
 	void renombrar(const string& nombre);
 

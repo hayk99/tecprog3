@@ -10,6 +10,7 @@ class Archivo : public Elemento {
 	int tamanyo;
 public:
 	Archivo();
+	~Archivo();
 	Archivo(const string& nombre);
 	Archivo(const string& nombre, const int tam);
 	int obtenerTamanyo(int i = 0) override;

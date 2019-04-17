@@ -26,6 +26,6 @@ public:
 	void vim(string vim,const int size);
 	void mkdir(string dir);
 	void ln(string orig, string dest);
-	void rm(string e);
+	void rm(const string& path);
 	bool addList (string& path, shared_ptr<Elemento>& ptr, string& dir);
 };

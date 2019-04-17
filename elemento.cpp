@@ -1,6 +1,7 @@
 #include "elemento.h"
 
 Elemento::Elemento() {}
+Elemento::~Elemento() {}
 
 string Elemento::devolverNombre(){
 	return nombre;

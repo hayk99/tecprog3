@@ -11,6 +11,7 @@ class Directorio : public Elemento {
 public:
 	Directorio();
 	Directorio(const string& nombreDir);
+	~Directorio();
 	int obtenerTamanyo(int i = 0)  override;
 	bool cambiarTamanyo(const int tam) override;
 	void anyadir(const shared_ptr<Elemento>& elemento);

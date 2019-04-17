@@ -4,6 +4,7 @@ Archivo::Archivo(){
 	nombre = "nuevo";
 	tamanyo = 1;
 }
+Archivo::~Archivo() {}
 
 Archivo::Archivo(const string& nombre){
 	Archivo::nombre = nombre;
