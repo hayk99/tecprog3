@@ -1,9 +1,12 @@
+#include <iostream>
 #include <string>
 #include <vector>
-#include <iostream>
+#include <memory>
+#include <list>
 #include <sstream>
 
 #include "ruta.h"
+#include "ruta.cpp"
 
 using namespace std;
 
@@ -31,8 +34,8 @@ int main()
 		if (cmd.size()<1)
 			continue;
 
-		//try
-		//{
+		try
+		{
 			if (cmd[0]=="pwd")
 			{
 				cout << ruta.pwd() << endl;
@@ -72,7 +75,7 @@ int main()
 			{
 				done = true;
 			}
-		/*}
+		}
 		catch (arbol_ficheros_error& e)
 		{
 			cerr << e.what() << endl;
@@ -80,7 +83,7 @@ int main()
 		catch (out_of_range& e)
 		{
 			cerr << e.what() << endl;
-		}*/
+		}
 	}
 	cout << endl;
 

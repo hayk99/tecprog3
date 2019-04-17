@@ -1,9 +1,9 @@
 #include <exception>
 #include "excepciones.h"
 
-ExcepcionArbolFicheros::ExcepcionArbolFicheros() noexcept {}
+arbol_ficheros_error::arbol_ficheros_error() noexcept {}
 
-const char* ExcepcionArbolFicheros::what() const noexcept{
+const char* arbol_ficheros_error::what() const noexcept{
 	return "Error en el Arbol de ficheros";
 }
 

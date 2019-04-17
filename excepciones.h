@@ -5,23 +5,23 @@
 
 using namespace std;
 
-class ExcepcionArbolFicheros {
+class arbol_ficheros_error {
 public:
-	ExcepcionArbolFicheros() noexcept;
+	arbol_ficheros_error() noexcept;
 	virtual const char* what() const noexcept;
 };
 
-class CambioTamanyoDirectorio : public ExcepcionArbolFicheros {
+class CambioTamanyoDirectorio : public arbol_ficheros_error {
 public:
 	const char* what() const noexcept;
 };
 
-class RutaCorrupta : public ExcepcionArbolFicheros {
+class RutaCorrupta : public arbol_ficheros_error {
 public:
 	const char* what() const noexcept;
 };
 
-class NombreRepetido : public ExcepcionArbolFicheros {
+class NombreRepetido : public arbol_ficheros_error {
 public:
 	const char* what() const noexcept;
 };

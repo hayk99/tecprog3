@@ -6,7 +6,9 @@ Ruta::Ruta(Directorio& root){
 	rutaActual.push_back(dirActual);
 }
 
-Ruta::~Ruta() {};
+Ruta::~Ruta() {
+	rutaActual.erase(rutaActual.begin(), rutaActual.end());
+}
 
 string Ruta::pwd() { 
 	cout << ruta  << endl;
@@ -106,6 +108,7 @@ void Ruta::cd(const string& path) {
 				cout << "Directorio \""<< path << "\" no existe\n";
 				dirActual = salvado;
 				ruta = salvar;
+				throw RutaCorrupta();
 			}
 			else {
 				rutaActual = rutaNueva;
@@ -137,6 +140,7 @@ void Ruta::stat(const string& path) {
 			copia_dir = dynamic_pointer_cast<Directorio>(aux);
 			if(copia_dir.get() == nullptr){                      // No es directorio lo que se buscaba y hay que salir
 				salir = true;
+				throw RutaCorrupta();
 			}
 			else if(f.eof()){
 				salir = true;
@@ -166,9 +170,15 @@ void Ruta::vim (string file, int size) {
 
 
 void Ruta::mkdir (string dir) {
-	Directorio nuevo (dir);
-	shared_ptr<Directorio> ptrNew = make_shared<Directorio>(dir);
-	(*dirActual).anyadir (ptrNew);
+	shared_ptr<Elemento> aux;
+	if ((*dirActual).devolverElemento(dir, aux)) {
+		throw NombreRepetido();
+	}
+	else {
+		Directorio nuevo (dir);
+		shared_ptr<Directorio> ptrNew = make_shared<Directorio>(dir);
+		(*dirActual).anyadir (ptrNew);
+	}	
 }
 
 

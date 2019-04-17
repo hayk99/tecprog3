@@ -10,8 +10,10 @@ int main(){
 	Directorio root("");
 	Ruta r(root);
 	r.mkdir("home");
+	r.mkdir("home");
 	r.mkdir("bin");
 	r.mkdir("etc");
+	cout << "llego"<<endl;
 	r.cd("home");
 	r.mkdir("desk");
 	r.mkdir("docs");
@@ -46,7 +48,7 @@ int main(){
 	r.ls();
 	r.cd("/home/desk/aoc/p22/");
 	r.pwd();
-	r.ls();
+	r.ls();/*
 	r.rm("/home/desk/aoc/p2");
 	r.cd("/home/desk/aoc");
 	r.ls();
@@ -74,8 +76,7 @@ int main(){
 
 
 
-	/*
-
+	
 
 
 

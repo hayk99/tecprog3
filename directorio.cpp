@@ -55,6 +55,7 @@ bool Directorio::devolverElemento(const string& fichero, shared_ptr<Elemento>& e
 }
 
 bool Directorio::cambiarTamanyo(const int tam){
-	cout << "Operacion no permitida, " << nombre << " es un directorio" << endl;
+	//cout << "Operacion no permitida, " << nombre << " es un directorio" << endl;
+	throw CambioTamanyoDirectorio();
 	return false;
 }
