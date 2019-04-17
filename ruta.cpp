@@ -2,6 +2,7 @@
 
 Ruta::Ruta(Directorio& root){
 	dirActual = make_shared<Directorio>(root);
+	ruta = "/";
 	rutaActual.push_back(dirActual);
 }
 
@@ -148,31 +149,24 @@ void Ruta::cd(string path) {
 }
 
 void Ruta::stat(const string& path) {
-	string elemento_a_busc;
+	string copia = path, elemento_a_busc;
 	shared_ptr<Directorio> copia_dir = dirActual;
-	if(path[0] == '/'){
-		// es una ruta completa, subir hasta raiz sin modificarlo
+	if(path[0] == '/'){ // es una ruta completa, subir hasta raiz sin modificarlo
+		copia.erase(0,1);
+		copia_dir = rutaActual.front();
 	}
-	stringstream f(path);
+	stringstream f(copia);
 	shared_ptr<Elemento> aux;   // Puntero al elemento a buscar
 	getline(f,elemento_a_busc,'/');
-	cout << elemento_a_busc << endl;
-	bool salir = false;
-	bool esta = true;
-	int i = 1;
+	bool salir = false, esta = true;
 	do {
-		cout << "iter " << i << endl;
-		cout << (*copia_dir).devolverNombre() << endl;
 		if(!(*copia_dir).devolverElemento(elemento_a_busc, aux)){   // No está lo que se buscaba
 			esta = false;
 			salir = true;
 		}
 		else{
-			cout << (*aux).devolverNombre() << endl;
-			copia_dir.reset();   // Peta
-			shared_ptr<Directorio> copia_dir = dynamic_pointer_cast<Directorio>(aux);
-			cout << (*copia_dir).devolverNombre() << endl;
-			if(copia_dir.get() == nullptr){                      // No es directorio lo que se buscaba
+			copia_dir = dynamic_pointer_cast<Directorio>(aux);
+			if(copia_dir.get() == nullptr){                      // No es directorio lo que se buscaba y hay que salir
 				salir = true;
 			}
 			else if(f.eof()){
@@ -182,63 +176,13 @@ void Ruta::stat(const string& path) {
 				getline(f,elemento_a_busc,'/');
 				if(elemento_a_busc == "\0"){
 					salir = true;
-				}
-				cout << elemento_a_busc << endl;			
+				}		
 			}
 		}
-		cout << "===============" << endl;
-		i++;
 	} while(!salir);
-	if(esta){
+	if(esta && f.eof()){
 		cout << (*aux).obtenerTamanyo() << endl;
 	}
-	else{
-		cout << "no esta" << endl;
-	}
-	/*
-	string path = path_;
-	shared_ptr<Elemento> item;
-	if (path[0]!='/') { //no es un path completo   MAL (Mirar linea 53)
-		(*dirActual).devolverElemento(path, item);
-		int peso = (*item).obtenerTamanyo(0);
-		cout << path << " tiene un peso de: "<< peso <<endl;
-	}
-	else { //es una ruta completa
-		path.erase (0);
-		int pos = path.find('/');
-		if (pos > 0) {	// es una ruta con varios '/', tipo : /dir1/dir2/file
-			while (pos > 0) {
-				string dir = path.substr (0, pos); //cojo la primera parte
-				if ((*dirActual).devolverElemento(dir, item)) {
-					shared_ptr<Directorio> dado = dynamic_pointer_cast<Directorio>(item);
-					if (dado != nullptr){
-							dirActual = dado;
-							ruta += path;
-							path.erase (0,pos+1); //borro ese parte del path
-							pos = path.find('/');
-					}
-				}
-			}
-		}
-		else { // path de tipo: /dir/file
-			list<std::shared_ptr<Directorio>>::iterator iter;
-			iter = rutaActual.begin();
-			string dir = path.substr(0,pos);
-			int peso = 0;
-			while ( iter != rutaActual.end() ){
-				if ( (*(*iter)).devolverNombre() == dir ) {
-					path.erase(0); //elimino ultima barra
-					dir = path.substr(0,ruta.length()); //extraigo nombre
-					(*(*iter)).devolverElemento(path, item);
-					peso = (*(*iter)).obtenerTamanyo(0);
-					cout << path << " tiene un peso de: "<<peso <<endl;
-					iter = rutaActual.end();
-				}
-				else iter++;
-			}
-		}	
-	}
-	*/
 }
 
 void Ruta::vim (string file, int size) {

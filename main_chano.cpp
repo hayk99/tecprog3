@@ -28,7 +28,7 @@ int main(){
 	(*ptrDir2).anyadir(ptrD);
 	(*ptrDir2).anyadir(ptrE);
 	Ruta r((*ptrRoot));
-	r.stat("Dir 1/C");
+	r.stat("Dir 1/Dir 2/eA");
 /*
 	cout << (*ptrDir1).mostrarElementos() << endl;
 	cout << (*ptrDir1).obtenerTamanyo() << endl;
