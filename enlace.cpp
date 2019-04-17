@@ -8,7 +8,7 @@ Enlace::~Enlace(){}
 
 int Enlace::obtenerTamanyo(int i){
 	if (i > 1024){
-		//cout << "Maximo nivel de recursividad alcanzado jeje" << endl;
+		throw recursividadInfinita();
 		return 0;
 	}
 	else{

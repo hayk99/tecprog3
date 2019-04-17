@@ -36,5 +36,10 @@ public:
 	const char* what() const noexcept;
 };
 
+class recursividadInfinita : public arbol_ficheros_error {
+public:
+	const char* what() const noexcept;
+};
+
 
 

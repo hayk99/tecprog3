@@ -144,7 +144,6 @@ void Ruta::stat(const string& path) {
 			copia_dir = dynamic_pointer_cast<Directorio>(aux);
 			if(copia_dir.get() == nullptr){                      // No es directorio lo que se buscaba y hay que salir
 				salir = true;
-				throw RutaCorrupta();
 			}
 			else if(f.eof()){
 				salir = true;
@@ -160,6 +159,7 @@ void Ruta::stat(const string& path) {
 	if(esta && f.eof()){
 		cout << "Tamaño es: " << (*aux).obtenerTamanyo() << endl;
 	}
+	else throw RutaCorrupta();
 }
 
 
@@ -222,7 +222,7 @@ void Ruta::ln (const string& orig, const string& dest) {
 		shared_ptr<Enlace> ptr = make_shared<Enlace>(dest, aux);
 		(*dirActual).anyadir(ptr);
 	}
-	else cout << "no creado\n";
+	else throw RutaCorrupta();
 }
 
 void Ruta::rm (const string& path) {
@@ -246,7 +246,6 @@ void Ruta::rm (const string& path) {
 			copia_dir = dynamic_pointer_cast<Directorio>(aux);
 			if(copia_dir.get() == nullptr){                      // No es directorio lo que se buscaba y hay que salir
 				salir = true;
-				throw RutaCorrupta();
 			}
 			else if(f.eof()){
 				salir = true;
@@ -265,6 +264,6 @@ void Ruta::rm (const string& path) {
 	if(esta && f.eof()){
 		cout << "borrando: " << (*aux).devolverNombre() << " cuyo padre es " << (*padre_elemento).devolverNombre() << endl;
 		(*padre_elemento).borrar((*aux).devolverNombre());
-		
 	}
+	else throw RutaCorrupta();
 }

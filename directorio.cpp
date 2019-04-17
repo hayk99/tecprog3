@@ -7,12 +7,12 @@ Directorio::Directorio(){
 Directorio::Directorio(const string& nombreDir){
 	nombre = nombreDir;
 }
+
 Directorio::~Directorio() {}
 
 void Directorio::anyadir(const shared_ptr<Elemento>& elemento){
 	elementos.push_back(elemento);
 }
-
 
 bool Directorio::borrar(const string& fichero){
 	bool encontrado = false;
@@ -55,7 +55,6 @@ bool Directorio::devolverElemento(const string& fichero, shared_ptr<Elemento>& e
 }
 
 bool Directorio::cambiarTamanyo(const int tam){
-	//cout << "Operacion no permitida, " << nombre << " es un directorio" << endl;
 	throw CambioTamanyoDirectorio();
 	return false;
 }

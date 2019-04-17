@@ -26,3 +26,7 @@ const char* cdErroneo::what() const noexcept {
 const char* noSalirse::what() const noexcept {
 	return "No hay mas cd";
 };
+
+const char* recursividadInfinita::what() const noexcept {
+	return "No se puede calcular el tamanyo debido a que hay un enlace a un directorio superior";
+};

@@ -5,6 +5,7 @@
 #include <string>
 #include <iostream>
 #include <list>
+#include "excepciones.h"
 
 class Enlace : public Elemento {
 	std::shared_ptr<Elemento> ptr;  // No puede ser shared pointer para que no retenga un elemento que ha sido borrado
