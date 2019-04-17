@@ -1,10 +1,13 @@
 all: main_chano
 
-main_chano: main_chano.o elemento.o directorio.o enlace.o archivo.o ruta.o
-	g++ -o main_chano main_chano.o elemento.o directorio.o enlace.o archivo.o ruta.o
+main_chano: main_chano.o elemento.o directorio.o enlace.o archivo.o ruta.o excepciones.o
+	g++ -o main_chano main_chano.o elemento.o directorio.o enlace.o archivo.o ruta.o excepciones.o
 
 main_chano.o: main_chano.cpp
 	g++ -c main_chano.cpp
+
+excepciones.o:	excepciones.cpp excepciones.h
+	g++ -c excepciones.cpp
 
 ruta.o:	ruta.cpp ruta.h
 	g++ -c ruta.cpp

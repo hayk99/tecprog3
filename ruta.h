@@ -9,6 +9,7 @@
 #include <iostream>
 #include <list>
 #include <sstream>
+#include "excepciones.h"
 
 using namespace std;
 

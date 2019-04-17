@@ -5,6 +5,7 @@
 #include <string>
 #include <iostream>
 #include <list>
+#include "excepciones.h"
 
 class Directorio : public Elemento {
 	list<shared_ptr<Elemento>> elementos;
