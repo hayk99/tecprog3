@@ -11,7 +11,6 @@ Ruta::~Ruta() {
 }
 
 string Ruta::pwd() { 
-	cout << ruta  << endl;
 	return ruta;
 }
 
@@ -46,13 +45,18 @@ void Ruta::cd(const string& path) {
 			dirActual = rutaActual.front();
 		}
 		else if (path==".."){
-			//quito un elemento
-			rutaActual.pop_back();
-			//cambio ptr a dir actual
-			dirActual = rutaActual.back();
-			//modifico string del nombre de la ruta actual 
-			ruta.erase(ruta.length()-1);
-			ruta.erase(ruta.rfind('/')+1, ruta.length());
+			if (ruta == "/" ){
+				throw noSalirse();
+			}
+			else {
+				//quito un elemento
+				rutaActual.pop_back();
+				//cambio ptr a dir actual
+				dirActual = rutaActual.back();
+				//modifico string del nombre de la ruta actual 
+				ruta.erase(ruta.length()-1);
+				ruta.erase(ruta.rfind('/')+1, ruta.length());
+			}
 		}
 		else {
 			//creo una copia de la lista actual
@@ -105,7 +109,6 @@ void Ruta::cd(const string& path) {
 				}
 			}
 			if (!pathCorrecto) { 
-				cout << "Directorio \""<< path << "\" no existe\n";
 				dirActual = salvado;
 				ruta = salvar;
 				throw RutaCorrupta();
@@ -116,6 +119,7 @@ void Ruta::cd(const string& path) {
 			}
 		}
 	}
+	else throw cdErroneo();
 }
 
 
@@ -242,6 +246,7 @@ void Ruta::rm (const string& path) {
 			copia_dir = dynamic_pointer_cast<Directorio>(aux);
 			if(copia_dir.get() == nullptr){                      // No es directorio lo que se buscaba y hay que salir
 				salir = true;
+				throw RutaCorrupta();
 			}
 			else if(f.eof()){
 				salir = true;

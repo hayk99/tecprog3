@@ -18,3 +18,11 @@ const char* RutaCorrupta::what() const noexcept {
 const char* NombreRepetido::what() const noexcept {
 	return "Ya existe un elemento con ese nombre";
 }
+
+const char* cdErroneo::what() const noexcept {
+	return "Parámetro de cd erroneo";
+}
+
+const char* noSalirse::what() const noexcept {
+	return "No hay mas cd";
+};

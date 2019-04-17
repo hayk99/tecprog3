@@ -1,12 +1,9 @@
-#include <iostream>
 #include <string>
 #include <vector>
-#include <memory>
-#include <list>
+#include <iostream>
 #include <sstream>
 
 #include "ruta.h"
-#include "ruta.cpp"
 
 using namespace std;
 

@@ -26,5 +26,15 @@ public:
 	const char* what() const noexcept;
 };
 
+class cdErroneo : public arbol_ficheros_error {
+public:
+	const char* what() const noexcept;
+};
+
+class noSalirse : public arbol_ficheros_error {
+public:
+	const char* what() const noexcept;
+};
+
 
 
