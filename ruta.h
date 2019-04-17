@@ -23,9 +23,9 @@ public:
 	void ls();
 	void cd(string path);
 	void stat(const string& path);
+	void ln(const string& orig, const string& dest);
+	void rm(const string& path);
 	void vim(string vim,const int size);
 	void mkdir(string dir);
-	void ln(string orig, string dest);
-	void rm(const string& path);
 	bool addList (string& path, shared_ptr<Elemento>& ptr, string& dir);
 };

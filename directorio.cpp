@@ -6,7 +6,6 @@ Directorio::Directorio(){
 
 Directorio::Directorio(const string& nombreDir){
 	nombre = nombreDir;
-	cout << "\tcreado con nombre: " << "\t" <<nombre <<endl;
 }
 Directorio::~Directorio() {}
 
@@ -19,12 +18,10 @@ bool Directorio::borrar(const string& fichero){
 	bool encontrado = false;
 	for(list<shared_ptr<Elemento>>::iterator i = elementos.begin(); !encontrado && i != elementos.end(); i++){
 		if((*(*i)).devolverNombre() == fichero){
-			cout << "En clase y borro "<< fichero << " que se supone que es  "<< (**i).devolverNombre() <<endl;
 			encontrado = true;
 			elementos.erase(i);
 		}
 	}
-	cout << "\nborrado clase\n";
 	return encontrado;
 }
 
@@ -47,7 +44,6 @@ int Directorio::obtenerTamanyo(int i){
 }
 
 bool Directorio::devolverElemento(const string& fichero, shared_ptr<Elemento>& elemento){
-	cout << "entro a devolver elemento \n";
 	bool encontrado = false;
 	for(list<shared_ptr<Elemento>>::iterator i = elementos.begin(); !encontrado && i != elementos.end(); i++){
 		if((*(*i)).devolverNombre() == fichero){

@@ -4,7 +4,6 @@ Ruta::Ruta(Directorio& root){
 	dirActual = make_shared<Directorio>(root);
 	ruta = "/";
 	rutaActual.push_back(dirActual);
-	//cout << "creada la ruta con nombre: "<< ruta <<endl;
 }
 
 Ruta::~Ruta() {};
@@ -16,7 +15,7 @@ string Ruta::pwd() {
 
 void Ruta::ls() {
 	string e = (*dirActual).mostrarElementos();
-	cout <<  e << endl;
+	cout <<  e.c_str() << endl;
 }
 
 
@@ -190,10 +189,7 @@ void Ruta::stat(const string& path) {
 
 void Ruta::vim (string file, int size) {
 	shared_ptr<Elemento> ptr = nullptr;
-	if ((*dirActual).devolverElemento(file, ptr)) {
-		(*ptr).cambiarTamanyo(size);
-	}
-	else {//no existe
+	if (!(*dirActual).devolverElemento(file, ptr)) { //no existe
 		ptr = make_shared<Archivo>(file);
 		(*dirActual).anyadir(ptr);
 	}
@@ -210,42 +206,41 @@ void Ruta::mkdir (string dir) {
 }
 
 
-void Ruta::ln (string orig, string dest) {
-	shared_ptr<Directorio> ptrDir = nullptr;
-	bool completo = false,  nodoHijo = false, terminado = false;
-	shared_ptr<Elemento> nuevo = nullptr;
-	int pos = 0;
-	string dir = "";
-	if (orig[0]=='/') { //path completo
-		ptrDir = make_shared<Directorio>("/");
-		dest.erase (0); //elimino la primera / de la ruta completa
-		completo = true;
-
+void Ruta::ln (const string& orig, const string& dest) {
+	string copia = orig, elemento_a_busc;
+	shared_ptr<Directorio> copia_dir = dirActual;
+	if(orig[0] == '/'){ // es una ruta completa, subir hasta raiz sin modificarlo
+		copia.erase(0,1);
+		copia_dir = rutaActual.front();
 	}
-	else {	//nodos hijos
-		ptrDir = dirActual;
-		nodoHijo = true;
-	}
-	if ( (dest.find('/') < 0 ) && (completo || nodoHijo)  ){
-		dir = dest.substr(0, dest.length());
-		if ((*ptrDir).devolverElemento(dir, nuevo ))
-			shared_ptr<Enlace> ptrLn = make_shared<Enlace>(orig, nuevo);
-		terminado  = true;
-	}
-	if (!terminado) {
-		pos = dest.find('/');
-		dir = dest.substr(0,pos);
-		if ( pos > 0 ) {
-			while ( pos > 0) {
-				if ((*ptrDir).devolverElemento(dir, nuevo)) {
-					dest.erase (0,pos+1);
-					pos = dest.find ('/');
-					if (pos > 0) dir = dest.substr (0,pos);				}
-			}
-			if (dest.length() > 0) dir = dest.substr (0, dest.length());
-			if ((*ptrDir).devolverElemento(dir, nuevo))
-					shared_ptr<Enlace> ptrLn = make_shared<Enlace>(orig, nuevo);
+	stringstream f(copia);
+	shared_ptr<Elemento> aux;   // Puntero al elemento a buscar
+	getline(f,elemento_a_busc,'/');
+	bool salir = false, esta = true;
+	do {
+		if(!(*copia_dir).devolverElemento(elemento_a_busc, aux)){   // No está lo que se buscaba
+			esta = false;
+			salir = true;
 		}
+		else{
+			copia_dir = dynamic_pointer_cast<Directorio>(aux);
+			if(copia_dir.get() == nullptr){                      // No es directorio lo que se buscaba y hay que salir
+				salir = true;
+			}
+			else if(f.eof()){
+				salir = true;
+			}
+			else{
+				getline(f,elemento_a_busc,'/');
+				if(elemento_a_busc == "\0"){
+					salir = true;
+				}		
+			}
+		}
+	} while(!salir);
+	if(esta && f.eof()){
+		shared_ptr<Enlace> ptr = make_shared<Enlace>(dest, aux);
+		(*dirActual).anyadir(ptr);
 	}
 }
 

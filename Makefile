@@ -1,10 +1,10 @@
-all: main
+all: main_chano
 
-main_chano: main.o elemento.o directorio.o enlace.o archivo.o ruta.o
-	g++ -o main main.o elemento.o directorio.o enlace.o archivo.o ruta.o
+main_chano: main_chano.o elemento.o directorio.o enlace.o archivo.o ruta.o
+	g++ -o main_chano main_chano.o elemento.o directorio.o enlace.o archivo.o ruta.o
 
-main_chano.o: main.cpp
-	g++ -c main.cpp
+main_chano.o: main_chano.cpp
+	g++ -c main_chano.cpp
 
 ruta.o:	ruta.cpp ruta.h
 	g++ -c ruta.cpp
@@ -22,4 +22,4 @@ directorio.o: directorio.h directorio.cpp
 	g++ -c directorio.cpp
 
 clean:
-	rm *.o main
+	rm *.o main_chano

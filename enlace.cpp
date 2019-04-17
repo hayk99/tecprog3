@@ -1,7 +1,8 @@
 #include "enlace.h"
 
-Enlace::Enlace(const string& nombre, const shared_ptr<Elemento>& e): ptr(e){
+Enlace::Enlace(const string& nombre, const shared_ptr<Elemento>& e){
 	Enlace::nombre = nombre;
+	ptr = e;
 }
 Enlace::~Enlace(){}
 
@@ -11,11 +12,11 @@ int Enlace::obtenerTamanyo(int i){
 		return 0;
 	}
 	else{
-		return (*(ptr.lock())).obtenerTamanyo(i+1);
+		return (*ptr).obtenerTamanyo(i+1);
 	}
 }
 
 bool Enlace::cambiarTamanyo(const int tam){
-	return (*(ptr.lock())).cambiarTamanyo(tam);
+	return (*ptr).cambiarTamanyo(tam);
 
 }
