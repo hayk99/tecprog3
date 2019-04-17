@@ -41,5 +41,9 @@ public:
 	const char* what() const noexcept;
 };
 
+class cdArchivo : public arbol_ficheros_error {
+	const char* what() const noexcept ;
+};
+
 
 

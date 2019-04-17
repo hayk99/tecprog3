@@ -30,3 +30,7 @@ const char* noSalirse::what() const noexcept {
 const char* recursividadInfinita::what() const noexcept {
 	return "No se puede calcular el tamanyo debido a que hay un enlace a un directorio superior";
 };
+
+const char* cdArchivo::what() const noexcept {
+	return "No se puede cd a un archivo";
+};

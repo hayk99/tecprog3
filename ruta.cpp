@@ -75,43 +75,69 @@ void Ruta::cd(const string& path) {
 			}
 			int pos = copia.find('/');
 			elem = copia.substr(0,pos);
-			bool seguir = true, pathCorrecto = true;
+			bool seguir = true, pathCorrecto = true, cdArch = false;
 			if ( pos > 0 ) {
 				while ( pos > 0 && seguir) {
 					if ((*dir).devolverElemento(elem, aux)) {
 						dir = dynamic_pointer_cast<Directorio>(aux);
 						if (dir != nullptr) {
+							//si estoy aqui es porque no es un directorio
 							rutaNueva.push_back(dir);
 							ruta+= elem;
 							ruta+= '/';
 							copia.erase (0,pos+1);
 							pos = copia.find ('/');
 							if (pos > 0) elem = copia.substr (0,pos);		
-						} 	
+						}  
 						else {
-							seguir = false;
-							pathCorrecto = false;
+							//si estoy aqui es porque no es un directorio
+							//compruebo que no haga cd a un archivo
+							shared_ptr<Archivo> arch;
+							arch = dynamic_pointer_cast<Archivo>(aux);
+							if (dir!=nullptr) throw cdArchivo();
+							else {
+								seguir = false;
+								pathCorrecto = false;
+								cdArch = true;
+							}
 						}
 					}
 					else  {
+						// no existe el directorio
 						seguir = false;
 						pathCorrecto = false;
+						//throw RutaCorrupta();
 					}
 				}
 			}
-			if (copia.length() > 0) elem = copia.substr (0, copia.length());
-			if ((*dir).devolverElemento(elem, aux)){
-				dir = dynamic_pointer_cast<Directorio>(aux);
-				if (dir != nullptr) {			
-					rutaNueva.push_back(dir);
-					ruta+= elem;
-					ruta+= '/';
+			//compruebo por si se queda algo en el path
+			if (copia.length() > 0) {
+				elem = copia.substr (0, copia.length());
+				if ((*dir).devolverElemento(elem, aux)){
+					dir = dynamic_pointer_cast<Directorio>(aux);
+					if (dir != nullptr) {			
+						rutaNueva.push_back(dir);
+						ruta+= elem;
+						ruta+= '/';
+					}
+					else {
+						shared_ptr<Archivo> arch;
+						arch = dynamic_pointer_cast<Archivo>(aux);
+						if (dir!=nullptr) throw cdArchivo();
+						else {
+							seguir = false;
+							pathCorrecto = false;
+							cdArch = true;
+						}
+					}
 				}
+				else pathCorrecto = false;
 			}
 			if (!pathCorrecto) { 
 				dirActual = salvado;
 				ruta = salvar;
-				throw RutaCorrupta();
+				if (cdArch) throw cdArchivo();
+				else throw RutaCorrupta();
 			}
 			else {
 				rutaActual = rutaNueva;
@@ -119,6 +145,7 @@ void Ruta::cd(const string& path) {
 			}
 		}
 	}
+	else if (path == ".") {}
 	else throw cdErroneo();
 }
 
@@ -262,7 +289,6 @@ void Ruta::rm (const string& path) {
 		}
 	} while(!salir);
 	if(esta && f.eof()){
-		cout << "borrando: " << (*aux).devolverNombre() << " cuyo padre es " << (*padre_elemento).devolverNombre() << endl;
 		(*padre_elemento).borrar((*aux).devolverNombre());
 	}
 	else throw RutaCorrupta();
