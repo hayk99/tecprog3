@@ -55,7 +55,22 @@ int main(){
 	r.cd("home");
 	r.pwd();
 	r.cd("/home/docs");
+	r.ls();
+	cout << endl << endl;
 	r.pwd();
+	
+	r.ln("/home/desk/aoc/p1", "linkaoc");
+
+	r.cd("linkaoc");
+	r.pwd();
+	r.ls();
+
+//	r.ls();
+
+
+
+
+
 
 
 

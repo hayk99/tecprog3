@@ -58,6 +58,7 @@ void Ruta::cd(const string& path) {
 			rutaNueva = rutaActual;
 			std::shared_ptr<Directorio> salvado = dirActual;	
 			string salvar = ruta;	
+			shared_ptr<Elemento> aux;   // Puntero al elemento a buscar
 			if (path[0] == '/') {
 				copia.erase(0,1);
 				ruta = '/';
@@ -66,7 +67,6 @@ void Ruta::cd(const string& path) {
 				rutaNueva.erase(rutaNueva.begin(), rutaNueva.end());
 				rutaNueva.push_back(dir);
 			}
-			shared_ptr<Elemento> aux;   // Puntero al elemento a buscar
 			int pos = copia.find('/');
 			elem = copia.substr(0,pos);
 			bool seguir = true, pathCorrecto = true;
@@ -174,7 +174,7 @@ void Ruta::mkdir (string dir) {
 
 void Ruta::ln (const string& orig, const string& dest) {
 	string copia = orig, elemento_a_busc;
-	shared_ptr<Directorio> copia_dir = dirActual;
+	shared_ptr<Directorio> copia_dir = dirActual;	
 	if(orig[0] == '/'){ // es una ruta completa, subir hasta raiz sin modificarlo
 		copia.erase(0,1);
 		copia_dir = rutaActual.front();
@@ -208,6 +208,7 @@ void Ruta::ln (const string& orig, const string& dest) {
 		shared_ptr<Enlace> ptr = make_shared<Enlace>(dest, aux);
 		(*dirActual).anyadir(ptr);
 	}
+	else cout << "no creado\n";
 }
 
 void Ruta::rm (const string& path) {
